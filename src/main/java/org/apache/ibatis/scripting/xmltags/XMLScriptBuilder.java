@@ -64,11 +64,14 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   public SqlSource parseScriptNode() {
+    // $ #
     MixedSqlNode rootSqlNode = parseDynamicTags(context);
     SqlSource sqlSource;
+    /*是否需要动态解析*/
     if (isDynamic) {
       sqlSource = new DynamicSqlSource(configuration, rootSqlNode);
     } else {
+      /*用占位符方式来解析*/
       sqlSource = new RawSqlSource(configuration, rootSqlNode, parameterType);
     }
     return sqlSource;
@@ -79,6 +82,7 @@ public class XMLScriptBuilder extends BaseBuilder {
     NodeList children = node.getNode().getChildNodes();
     for (int i = 0; i < children.getLength(); i++) {
       XNode child = node.newXNode(children.item(i));
+      /*是纯文本*/
       if (child.getNode().getNodeType() == Node.CDATA_SECTION_NODE || child.getNode().getNodeType() == Node.TEXT_NODE) {
         String data = child.getStringBody("");
         TextSqlNode textSqlNode = new TextSqlNode(data);

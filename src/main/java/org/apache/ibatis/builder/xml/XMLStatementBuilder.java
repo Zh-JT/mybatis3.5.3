@@ -53,6 +53,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     this.requiredDatabaseId = databaseId;
   }
 
+  /* # $ 区别 id为数据库ID*/
   public void parseStatementNode() {
     String id = context.getStringAttribute("id");
     String databaseId = context.getStringAttribute("databaseId");
@@ -63,22 +64,28 @@ public class XMLStatementBuilder extends BaseBuilder {
 
     String nodeName = context.getNode().getNodeName();
     SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
+    /*是不是查询*/
     boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
+    /*是否刷新缓存 默认值 增删改刷新 查询不刷新*/
     boolean flushCache = context.getBooleanAttribute("flushCache", !isSelect);
+    /*是否使用二级缓存 默认值 查询使用 增删改不适用*/
     boolean useCache = context.getBooleanAttribute("useCache", isSelect);
+    /*是否需要处理嵌套查询结果 group by*/
     boolean resultOrdered = context.getBooleanAttribute("resultOrdered", false);
 
     // Include Fragments before parsing
     XMLIncludeTransformer includeParser = new XMLIncludeTransformer(configuration, builderAssistant);
+    /*替换includes标签为对应的sql标签中的值*/
     includeParser.applyIncludes(context.getNode());
 
     String parameterType = context.getStringAttribute("parameterType");
     Class<?> parameterTypeClass = resolveClass(parameterType);
-
+    /*解析配置的自定义脚本驱动语言  mybatisPlus用的比较多*/
     String lang = context.getStringAttribute("lang");
     LanguageDriver langDriver = getLanguageDriver(lang);
 
     // Parse selectKey after includes and remove them.
+    /*解析selectKey*/
     processSelectKeyNodes(id, parameterTypeClass, langDriver);
 
     // Parse the SQL (pre: <selectKey> and <include> were parsed and removed)
@@ -92,7 +99,7 @@ public class XMLStatementBuilder extends BaseBuilder {
           configuration.isUseGeneratedKeys() && SqlCommandType.INSERT.equals(sqlCommandType))
           ? Jdbc3KeyGenerator.INSTANCE : NoKeyGenerator.INSTANCE;
     }
-
+  /*解析Sql 根据sql文本来判断是否需要动态解析 如果没有动态sql语句且只有#{}的时候 直接静态解析使用 ?站位 当有${}不解析*/
     SqlSource sqlSource = langDriver.createSqlSource(configuration, context, parameterTypeClass);
     StatementType statementType = StatementType.valueOf(context.getStringAttribute("statementType", StatementType.PREPARED.toString()));
     Integer fetchSize = context.getIntAttribute("fetchSize");

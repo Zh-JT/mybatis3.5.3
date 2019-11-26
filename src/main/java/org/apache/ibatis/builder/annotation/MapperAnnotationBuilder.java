@@ -123,8 +123,10 @@ public class MapperAnnotationBuilder {
     this.type = type;
   }
 
+  /*解析Mapper对象 */
   public void parse() {
     String resource = type.toString();
+    /*如果之前解析了xml 这就不在解析*/
     if (!configuration.isResourceLoaded(resource)) {
       loadXmlResource();
       configuration.addLoadedResource(resource);

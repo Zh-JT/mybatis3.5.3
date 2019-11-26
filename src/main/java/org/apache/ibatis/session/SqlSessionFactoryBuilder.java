@@ -74,7 +74,9 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     try {
+      /*解析config.xml(mybatisj解析xml是用Java dom技术)*/
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+      /*parse(); 解析config.xml里面的节点*/
       return build(parser.parse());
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);

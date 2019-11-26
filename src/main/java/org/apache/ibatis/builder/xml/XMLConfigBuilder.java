@@ -91,6 +91,7 @@ public class XMLConfigBuilder extends BaseBuilder {
   }
 
   public Configuration parse() {
+    /*只会解析mybatis中节点一次 parsed是一个Boolean类型 如果Boolean为true 会抛出一个异常*/
     if (parsed) {
       throw new BuilderException("Each XMLConfigBuilder can only be used once.");
     }
@@ -106,9 +107,12 @@ public class XMLConfigBuilder extends BaseBuilder {
       Properties settings = settingsAsProperties(root.evalNode("settings"));
       loadCustomVfs(settings);
       loadCustomLogImpl(settings);
+      /*所谓别名，其实就是你指定的别名对应的class存储在一个Map当中*/
       typeAliasesElement(root.evalNode("typeAliases"));
       pluginElement(root.evalNode("plugins"));
+      /*objectFactory 自定义实例化对象的行为 mybatis中返回一个User对象 给这个User对象赋值 可以重写*/
       objectFactoryElement(root.evalNode("objectFactory"));
+      /*MateObject 方便操作实体类的对象*/
       objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
       reflectorFactoryElement(root.evalNode("reflectorFactory"));
       settingsElement(settings);
@@ -156,13 +160,17 @@ public class XMLConfigBuilder extends BaseBuilder {
     configuration.setLogImpl(logImpl);
   }
 
+  /*解析别名方式有两种*/
   private void typeAliasesElement(XNode parent) {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
+        /*批量解析*/
         if ("package".equals(child.getName())) {
           String typeAliasPackage = child.getStringAttribute("name");
           configuration.getTypeAliasRegistry().registerAliases(typeAliasPackage);
         } else {
+          /*alias别名的名称
+          * type对应的class的地址*/
           String alias = child.getStringAttribute("alias");
           String type = child.getStringAttribute("type");
           try {
@@ -360,10 +368,12 @@ public class XMLConfigBuilder extends BaseBuilder {
   private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
+        // 首先解析package节点 到底是解析注解还是解析xml
         if ("package".equals(child.getName())) {
           String mapperPackage = child.getStringAttribute("name");
           configuration.addMappers(mapperPackage);
         } else {
+          /*三个值只能一个值有值*/
           String resource = child.getStringAttribute("resource");
           String url = child.getStringAttribute("url");
           String mapperClass = child.getStringAttribute("class");

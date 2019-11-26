@@ -43,6 +43,7 @@ public class GenericTokenParser {
     int offset = 0;
     final StringBuilder builder = new StringBuilder();
     StringBuilder expression = null;
+    /*遍历所有#{}*/
     while (start > -1) {
       if (start > 0 && src[start - 1] == '\\') {
         // this open token is escaped. remove the backslash and continue.

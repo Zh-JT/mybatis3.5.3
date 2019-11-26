@@ -93,9 +93,11 @@ public class XMLMapperBuilder extends BaseBuilder {
     if (!configuration.isResourceLoaded(resource)) {
       configurationElement(parser.evalNode("/mapper"));
       configuration.addLoadedResource(resource);
+      /*绑定namespace里面的对象*/
       bindMapperForNamespace();
     }
 
+    /*重新解析节点*/
     parsePendingResultMaps();
     parsePendingCacheRefs();
     parsePendingStatements();
@@ -104,18 +106,21 @@ public class XMLMapperBuilder extends BaseBuilder {
   public XNode getSqlFragment(String refid) {
     return sqlFragments.get(refid);
   }
-
+  /*解析mapper文件里面的节点 拿到里面的配置项 最终封装成一个MapperStatement对象*/
   private void configurationElement(XNode context) {
     try {
+      /*解析命名空间*/
       String namespace = context.getStringAttribute("namespace");
       if (namespace == null || namespace.equals("")) {
         throw new BuilderException("Mapper's namespace cannot be empty");
       }
       builderAssistant.setCurrentNamespace(namespace);
+      /*解析缓存节点*/
       cacheRefElement(context.evalNode("cache-ref"));
       cacheElement(context.evalNode("cache"));
       parameterMapElement(context.evalNodes("/mapper/parameterMap"));
       resultMapElements(context.evalNodes("/mapper/resultMap"));
+      /*配置自己的静态sql*/
       sqlElement(context.evalNodes("/mapper/sql"));
       buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
     } catch (Exception e) {
@@ -134,8 +139,10 @@ public class XMLMapperBuilder extends BaseBuilder {
     for (XNode context : list) {
       final XMLStatementBuilder statementParser = new XMLStatementBuilder(configuration, builderAssistant, context, requiredDatabaseId);
       try {
+        /*解析xml节点*/
         statementParser.parseStatementNode();
       } catch (IncompleteElementException e) {
+        /*xml语句有问题时 存储到集合中 等解析完能解析的在重新解析0*/
         configuration.addIncompleteStatement(statementParser);
       }
     }
@@ -230,6 +237,7 @@ public class XMLMapperBuilder extends BaseBuilder {
         Integer numericScale = parameterNode.getIntAttribute("numericScale");
         ParameterMode modeEnum = resolveParameterMode(mode);
         Class<?> javaTypeClass = resolveClass(javaType);
+        /*Java中String ---> 对应 MySQL中varchar*/
         JdbcType jdbcTypeEnum = resolveJdbcType(jdbcType);
         Class<? extends TypeHandler<?>> typeHandlerClass = resolveClass(typeHandler);
         ParameterMapping parameterMapping = builderAssistant.buildParameterMapping(parameterClass, property, javaTypeClass, jdbcTypeEnum, resultMap, modeEnum, typeHandlerClass, numericScale);

@@ -52,6 +52,7 @@ public class TextSqlNode implements SqlNode {
     return true;
   }
 
+  /*处理${}*/
   private GenericTokenParser createParser(TokenHandler handler) {
     return new GenericTokenParser("${", "}", handler);
   }
@@ -99,6 +100,9 @@ public class TextSqlNode implements SqlNode {
       return isDynamic;
     }
 
+    /*当扫描到${}的时候调用此方法,就是不解析 在运行是替换为具体的值
+     PreparedStatement一个是预编译
+     statement 一个不是预编译*/
     @Override
     public String handleToken(String content) {
       this.isDynamic = true;

@@ -39,6 +39,7 @@ public class SqlSourceBuilder extends BaseBuilder {
     super(configuration);
   }
 
+  /*解析#{}*/
   public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
     ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
     GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
@@ -62,6 +63,7 @@ public class SqlSourceBuilder extends BaseBuilder {
       return parameterMappings;
     }
 
+    /*全局扫描到#{id} 字符串之后 会把里面所有#{}调用handleToken 替换为?*/
     @Override
     public String handleToken(String content) {
       parameterMappings.add(buildParameterMapping(content));
