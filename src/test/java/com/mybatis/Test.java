@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Test {
@@ -24,7 +25,8 @@ public class Test {
     DemoMapper mapper = sqlSession.getMapper(DemoMapper.class);
     Map<String,Object> map = new HashMap<>();
     map.put("id","1");
-    System.out.println(mapper.selectAll(map));
+    List<HashMap<String, Object>> hashMaps = mapper.selectAll(map);
+    System.out.println(hashMaps);
     sqlSession.close();
   }
 }

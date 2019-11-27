@@ -29,6 +29,7 @@
     <!--<package name=""></package>-->
     <!--mapper里的属性 resource url class-->
     <mapper resource="mapper/DemoMapper.xml"></mapper>
+
   </mappers>
 
 </configuration>
