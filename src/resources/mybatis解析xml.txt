@@ -1,0 +1,10 @@
+调用SqlSessionFactoryBuilder类中的build()方法把mybatis当做一个流传进来使用javaDom解析
+XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+调用XMLConfigBuilder类中的parse()方法 这个方法只会解析mybatis中节点一次，parsed是一个Boolean类型如果解析了就会 parsed就是一个false 会抛出异常
+如果没有解析就会调用XPathParser类中的evalNode()方法 先解析"/configuration"这个节点。在调用parseConfiguration(XNode root)方法 解析里面的标签元素
+包括一些所谓的别名 objectFactory ，MateObject，mapper（）
+调用一些mapperElement(xNode parent)解析里面的mapper 首先解析package节点 到底是解析注解还是解析xml   /*三个值只能一个值有值*/ 调用 XMLMapperBuilder的parse（）解析在调用configurationElement方法
+解析命名空间调用buildStatementFromContext方法在调用XMLStatementBuilder方法确定是不是查询  是否刷新缓存 默认值 增删改刷新 查询不刷新  是否使用二级缓存 默认值 查询使用 增删改不适用 是否需要处理嵌套查询结果 group by
+然后开始解析$和#如果是#{}则调用SQLSourceBuilder的handleToken()方法把#{}替换？ GenericTokenParser的paser()方法会把所有的#{}替换为? 返回给BaseBuilder的parse（）方法  调用XMLScriptBuilder的parseScriptNode方法
+判断是否需要占位符 mapper。xml节点已经解析完 如果xml语句有问题的时候存储到集合中 等解析完能解析的在重新解析
+

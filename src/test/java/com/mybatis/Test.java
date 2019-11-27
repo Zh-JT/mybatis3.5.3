@@ -20,6 +20,7 @@ public class Test {
     /*从调用者角度来讲，与数据库打交道的对象SqlSession
      *通过动态代理 去帮我们执行SQL
      * */
+    /*拿到一个动态代理后的Mapper*/
     DemoMapper mapper = sqlSession.getMapper(DemoMapper.class);
     Map<String,Object> map = new HashMap<>();
     map.put("id","1");

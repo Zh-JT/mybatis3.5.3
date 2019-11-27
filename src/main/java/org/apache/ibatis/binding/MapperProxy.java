@@ -74,11 +74,14 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     lookupConstructor = lookup;
   }
 
+  //TODO
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
       if (Object.class.equals(method.getDeclaringClass())) {
+        /*你是不是调用Object默认的方法*/
         return method.invoke(this, args);
+        /*对于默认方法的处理*/
       } else if (method.isDefault()) {
         if (privateLookupInMethod == null) {
           return invokeDefaultMethodJava8(proxy, method, args);
@@ -93,6 +96,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     return mapperMethod.execute(sqlSession, args);
   }
 
+  /*动态代理的缓存*/
   private MapperMethod cachedMapperMethod(Method method) {
     return methodCache.computeIfAbsent(method,
         k -> new MapperMethod(mapperInterface, method, sqlSession.getConfiguration()));
@@ -107,9 +111,11 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
         .bindTo(proxy).invokeWithArguments(args);
   }
 
+  /*如果是默认方法 就会把方法绑定到动态代理对象里*/
   private Object invokeDefaultMethodJava8(Object proxy, Method method, Object[] args)
       throws Throwable {
     final Class<?> declaringClass = method.getDeclaringClass();
+    /*类似于反射调用方法操作类 Java8*/
     return lookupConstructor.newInstance(declaringClass, ALLOWED_MODES).unreflectSpecial(method, declaringClass)
         .bindTo(proxy).invokeWithArguments(args);
   }

@@ -75,7 +75,7 @@ public class CachingExecutor implements Executor {
     flushCacheIfRequired(ms);
     return delegate.update(ms, parameterObject);
   }
-
+  /*getBoundSql 如果是${} 参数在这里映射  #{}不会处理*/
   @Override
   public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
     BoundSql boundSql = ms.getBoundSql(parameterObject);

@@ -39,7 +39,7 @@ public class SqlSourceBuilder extends BaseBuilder {
     super(configuration);
   }
 
-  /*解析#{}*/
+  /*解析#{} 替换为？*/
   public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
     ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
     GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
