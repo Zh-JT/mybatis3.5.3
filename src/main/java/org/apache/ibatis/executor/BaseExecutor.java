@@ -198,6 +198,10 @@ public abstract class BaseExecutor implements Executor {
       throw new ExecutorException("Executor was closed.");
     }
     CacheKey cacheKey = new CacheKey();
+    /*计算hashcode 判断是否是一条查询的一句 首先sql id相同
+    * 如果开启分页 其实位置得相同 查询的条数得相同
+    * 绑定的sql相同
+    * 传的参数相同*/
     cacheKey.update(ms.getId());
     cacheKey.update(rowBounds.getOffset());
     cacheKey.update(rowBounds.getLimit());

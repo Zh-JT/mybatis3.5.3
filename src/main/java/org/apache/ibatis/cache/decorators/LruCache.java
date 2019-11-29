@@ -29,6 +29,7 @@ public class LruCache implements Cache {
 
   private final Cache delegate;
   private Map<Object, Object> keyMap;
+  /*最长时间没有的key*/
   private Object eldestKey;
 
   public LruCache(Cache delegate) {

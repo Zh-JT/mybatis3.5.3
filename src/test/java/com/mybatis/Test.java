@@ -25,8 +25,9 @@ public class Test {
     DemoMapper mapper = sqlSession.getMapper(DemoMapper.class);
     Map<String,Object> map = new HashMap<>();
     map.put("id","1");
-    List<HashMap<String, Object>> hashMaps = mapper.selectAll(map);
-    System.out.println(hashMaps);
+    UserVo userVo = mapper.selectAll(map);
+    System.out.println(userVo.getId());
+    System.out.println(userVo.getName());
     sqlSession.close();
   }
 }

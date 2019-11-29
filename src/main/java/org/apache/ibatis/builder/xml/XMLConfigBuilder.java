@@ -100,6 +100,7 @@ public class XMLConfigBuilder extends BaseBuilder {
     return configuration;
   }
 
+  /*解析mybatis.xml里的节点里所有配置*/
   private void parseConfiguration(XNode root) {
     try {
       //issue #117 read properties first
@@ -141,6 +142,8 @@ public class XMLConfigBuilder extends BaseBuilder {
     return props;
   }
 
+  /*VFS包含是虚拟文件系统:主要是通过程序能够方便读取本地文件系统，FTP文件系统等系统中的文件资源
+  * 要是通过该配置可以加载自定义的虚拟文件系统应用程序*/
   private void loadCustomVfs(Properties props) throws ClassNotFoundException {
     String value = props.getProperty("vfsImpl");
     if (value != null) {

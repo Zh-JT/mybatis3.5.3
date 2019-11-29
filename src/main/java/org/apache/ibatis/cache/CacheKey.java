@@ -68,7 +68,8 @@ public class CacheKey implements Cloneable, Serializable {
 
   public void update(Object object) {
     int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object);
-
+    /*HashMap 首先判断hashcode hashcode相同的情况下 判断equals
+     */
     count++;
     checksum += baseHashCode;
     baseHashCode *= count;
