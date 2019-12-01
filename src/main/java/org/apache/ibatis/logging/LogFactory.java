@@ -30,6 +30,8 @@ public final class LogFactory {
 
   private static Constructor<? extends Log> logConstructor;
 
+  /*加载静态代码块默认使用SLF4j
+  * 桥接模式 方便日志格式管理*/
   static {
     tryImplementation(LogFactory::useSlf4jLogging);
     tryImplementation(LogFactory::useCommonsLogging);

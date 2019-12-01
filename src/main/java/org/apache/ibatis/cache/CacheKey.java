@@ -41,6 +41,10 @@ public class CacheKey implements Cloneable, Serializable {
   };
 
   private static final int DEFAULT_MULTIPLIER = 37;
+  /* 17是质子数中一个“不大不小”的存在，如果你使用的是一个如2的较小质数，
+   * 那么得出的乘积会在一个很小的范围，很容易造成哈希值的冲突。
+   * 而如果选择一个100以上的质数，得出的哈希值会超出int的最大范围，这两种都不合适。
+   */
   private static final int DEFAULT_HASHCODE = 17;
 
   private final int multiplier;

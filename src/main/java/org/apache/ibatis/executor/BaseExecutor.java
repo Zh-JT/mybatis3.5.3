@@ -151,9 +151,12 @@ public abstract class BaseExecutor implements Executor {
       queryStack++;
       list = resultHandler == null ? (List<E>) localCache.getObject(key) : null;
       if (list != null) {
+        /*走缓存查询了*/
         /*对于存储过程有输出资源的处理*/
+ System.out.println("select cache");
         handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
       } else {
+System.out.println("select database");
         list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);
       }
     } finally {
@@ -330,6 +333,8 @@ public abstract class BaseExecutor implements Executor {
     } finally {
       localCache.removeObject(key);
     }
+    /*存放缓存*/
+System.out.println("缓存对象PerpetualCache\n"+"key:"+key+"\n"+"value:"+list);
     localCache.putObject(key, list);
     if (ms.getStatementType() == StatementType.CALLABLE) {
       localOutputParameterCache.putObject(key, parameter);

@@ -73,7 +73,7 @@ public class MapperMethod {
         break;
       }
       case SELECT:
-        if (method.returnsVoid() && method.hasResultHandler()) {
+         if (method.returnsVoid() && method.hasResultHandler()) {
           executeWithResultHandler(sqlSession, args);
           result = null;
         } else if (method.returnsMany()) {

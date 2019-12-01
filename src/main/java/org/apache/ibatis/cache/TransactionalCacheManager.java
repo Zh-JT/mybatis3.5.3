@@ -36,6 +36,8 @@ public class TransactionalCacheManager {
   }
 
   public void putObject(Cache cache, CacheKey key, Object value) {
+    /*放进缓存内容*/
+System.out.println("put cache........");
     getTransactionalCache(cache).putObject(key, value);
   }
 

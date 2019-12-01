@@ -26,8 +26,11 @@ public class Test {
     Map<String,Object> map = new HashMap<>();
     map.put("id","1");
     UserVo userVo = mapper.selectAll(map);
+    UserVo userVo1 = mapper.selectAll(map);
     System.out.println(userVo.getId());
     System.out.println(userVo.getName());
+    System.out.println(userVo1.getId());
+    System.out.println(userVo1.getName());
     sqlSession.close();
   }
 }
