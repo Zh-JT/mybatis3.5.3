@@ -27,10 +27,11 @@ public class Test {
     map.put("id","1");
     UserVo userVo = mapper.selectAll(map);
     UserVo userVo1 = mapper.selectAll(map);
-    System.out.println(userVo.getId());
-    System.out.println(userVo.getName());
-    System.out.println(userVo1.getId());
-    System.out.println(userVo1.getName());
+    System.out.println(userVo.getId()+" "+userVo.getName());
+    System.out.println(userVo1.getId()+" "+userVo1.getName());
     sqlSession.close();
+    int i=2;
+    int ct = (++i)+(++i)+(++i);
+    System.out.println(ct);
   }
 }
